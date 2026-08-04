@@ -1,0 +1,65 @@
+classDiagram
+    class Owner {
+        -name: str
+        -available_minutes: int
+        -preferred_start_time: str
+        -preferred_end_time: str
+        +update_info()
+    }
+
+    class Pet {
+        -name: str
+        -species: str
+        -age: int
+        -notes: str
+        +update_info()
+    }
+
+    class CareTask {
+        -task_id: int
+        -name: str
+        -category: str
+        -duration_minutes: int
+        -priority: int
+        -required: bool
+        +update_task()
+    }
+
+    class ScheduleItem {
+        -task: CareTask
+        -start_time: str
+        -end_time: str
+        +display()
+    }
+
+    class DailyPlan {
+        -date: str
+        -scheduled_items: list
+        -skipped_tasks: list
+        -total_minutes: int
+        +add_item()
+        +get_summary()
+    }
+
+    class Scheduler {
+        +generate_plan(owner: Owner, pet: Pet, tasks: list) DailyPlan
+        +sort_tasks(tasks: list) list
+        +can_fit(task: CareTask, remaining_time: int) bool
+    }
+
+    class PlanExplanation {
+        -reasons: list
+        +add_reason(reason: str)
+        +get_explanation() str
+    }
+
+    Owner "1" -- "1" Pet : owns
+    Pet "1" -- "many" CareTask : requires
+    DailyPlan "1" *-- "many" ScheduleItem : contains
+    DailyPlan "1" -- "1" PlanExplanation : includes
+    ScheduleItem "many" --> "1" CareTask : schedules
+    PlanExplanation "1" --> "many" CareTask : explains
+    Scheduler ..> Owner : uses
+    Scheduler ..> Pet : uses
+    Scheduler ..> CareTask : uses
+    Scheduler ..> DailyPlan : creates

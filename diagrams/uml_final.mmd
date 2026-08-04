@@ -1,0 +1,95 @@
+classDiagram
+    class Task {
+        -task_id: int
+        -description: str
+        -duration_minutes: int
+        -priority: int
+        -frequency: str
+        -required: bool
+        -completed: bool
+        -preferred_time: str
+        -due_date: str
+        -last_completed_date: str
+        +mark_complete(date: str)
+        +is_due(date: str) bool
+        +create_next_occurrence(completed_date: str) Task
+    }
+
+    class Pet {
+        -name: str
+        -species: str
+        -age: int
+        -notes: str
+        -tasks: list~Task~
+        +add_task(task: Task)
+        +get_tasks() list
+        +get_tasks_by_status(completed: bool) list
+        +mark_task_complete(task: Task, date: str) Task
+        +update_info()
+    }
+
+    class Owner {
+        -name: str
+        -available_minutes: int
+        -preferred_start_time: str
+        -preferred_end_time: str
+        -pets: list~Pet~
+        +add_pet(pet: Pet)
+        +get_all_tasks() list
+        +filter_tasks(pet_name: str, completed: bool) list
+        +get_tasks_by_pet(pet_name: str) list
+        +get_tasks_by_status(completed: bool) list
+        +update_info()
+    }
+
+    class ScheduleItem {
+        -pet: Pet
+        -task: Task
+        -start_time: str
+        -end_time: str
+        +display() str
+    }
+
+    class DailyPlan {
+        -date: str
+        -scheduled_items: list~ScheduleItem~
+        -skipped_tasks: list
+        -total_minutes: int
+        -warnings: list
+        +add_item(item: ScheduleItem)
+        +add_skipped(pet: Pet, task: Task)
+        +get_items_for_pet(pet_name: str) list
+        +has_conflict(start_time: str, end_time: str) bool
+        +get_summary() str
+    }
+
+    class PlanExplanation {
+        -reasons: list
+        +add_reason(reason: str)
+        +get_explanation() str
+    }
+
+    class Scheduler {
+        +generate_plan(owner: Owner, date: str) tuple~DailyPlan, PlanExplanation~
+        +sort_tasks(pet_tasks: list) list
+        +sort_by_time(pet_tasks: list) list
+        +can_fit(task: Task, remaining_time: int) bool
+        +detect_conflicts(scheduled_items: list) list
+        -_format_conflict(a, b) str
+        -_next_open_slot(plan: DailyPlan, earliest_start: str, duration_minutes: int) tuple
+        -_add_minutes(time_str: str, minutes: int) str
+    }
+
+    Owner "1" *-- "many" Pet : owns
+    Pet "1" *-- "many" Task : has
+    ScheduleItem "many" --> "1" Pet : belongs to
+    ScheduleItem "many" --> "1" Task : schedules
+    DailyPlan "1" *-- "many" ScheduleItem : contains
+    DailyPlan "1" -- "1" PlanExplanation : returned alongside
+    Task "1" ..> "0..1" Task : create_next_occurrence() spawns
+    Scheduler ..> Owner : reads
+    Scheduler ..> Pet : reads
+    Scheduler ..> Task : sorts, filters, fits
+    Scheduler ..> DailyPlan : creates
+    Scheduler ..> ScheduleItem : creates
+    Scheduler ..> PlanExplanation : creates
