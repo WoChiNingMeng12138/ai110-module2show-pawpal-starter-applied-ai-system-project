@@ -1,0 +1,51 @@
+flowchart TD
+    subgraph Input
+        A[Pet object\nspecies / age / notes]
+        U((User clicks\n"AI Smart Care Plan"))
+    end
+
+    subgraph Retriever
+        KB[(knowledge_base/\n*.txt care guides)]
+        CH[Chunker\nparagraph split]
+        VS[(ChromaDB\npersistent vector store)]
+        KB --> CH --> VS
+        A --> Q[Build query string\nspecies + age + notes]
+        Q --> VS
+        VS -->|top-k chunks| CTX[Retrieved context]
+    end
+
+    subgraph Agent["Agent (rag_advisor.py)"]
+        PR[Prompt assembly\nsystem + retrieved context + pet info]
+        LLM[Claude Opus 5\nstructured output\njson_schema: advice + tasks]
+        CTX --> PR
+        PR --> LLM
+        LLM -->|API error| ERR[Exception]
+    end
+
+    subgraph Output
+        ADV[Natural-language\ncare advice]
+        TASKS[Structured task list\ndescription, duration,\npriority, frequency, ...]
+        LLM --> ADV
+        LLM --> TASKS
+    end
+
+    subgraph Integration["pawpal_system.py integration"]
+        MAP[Map each task dict\n-> Task dataclass instance]
+        TASKS --> MAP
+        MAP --> PET_TASKS[(Pet.tasks list)]
+    end
+
+    subgraph HumanCheck["Human / tester checkpoint"]
+        REVIEW{{User reviews advice\n+ generated tasks in UI\nbefore they persist}}
+        ERR --> UIERR[st.error shown to user]
+        PET_TASKS --> REVIEW
+        REVIEW -->|accepted| PET_TASKS
+        REVIEW -->|rejected| DISCARD[Discard, no task added]
+    end
+
+    U --> A
+    ADV --> REVIEW
+
+    style HumanCheck fill:#fff3cd,stroke:#997404
+    style Agent fill:#e7f1ff,stroke:#0d6efd
+    style Retriever fill:#e6f4ea,stroke:#1e7e34

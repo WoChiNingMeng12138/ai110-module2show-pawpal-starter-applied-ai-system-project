@@ -1,0 +1,35 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+
+# --- Secrets ---
+.env
+
+# --- Local RAG vector store (rebuilt automatically from knowledge_base/ on first run) ---
+.chroma_store/
+
+# --- Test / tooling caches ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Local debug logs (not part of the app) ---
+streamlit_log*.txt
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- Build artifacts ---
+build/
+dist/
+*.egg-info/

@@ -1,0 +1,35 @@
+Dog Care Basics
+
+Dogs need at least one walk per day, ideally split into a morning and evening walk of 20-30 minutes each, to maintain healthy weight and mental stimulation. Puppies under 1 year old need shorter, more frequent walks (10-15 minutes, 3-4 times a day) because their joints are still developing. Senior dogs (8+ years) may need shorter, gentler walks but should still go out daily to maintain mobility.
+
+Dogs should be fed twice a day, roughly 12 hours apart, unless a veterinarian recommends otherwise for a specific health condition. Puppies under 6 months often need three smaller meals a day. Fresh water should be available at all times and checked/refilled at least once daily.
+
+Dental care for dogs is often overlooked. Brushing a dog's teeth 2-3 times per week helps prevent plaque buildup and periodontal disease. Dental chews can supplement but not replace brushing.
+
+Grooming needs vary by breed. Short-haired dogs typically need brushing once a week, while long-haired or double-coated breeds may need brushing daily during shedding season. Bathing should happen every 4-6 weeks unless the dog gets visibly dirty sooner; over-bathing can strip natural oils and irritate skin.
+
+Medication for dogs with chronic conditions (e.g., thyroid, arthritis) should be given at the same time every day to maintain consistent blood levels. Missing doses can reduce effectiveness.
+
+Dogs are social animals and benefit from daily play sessions (10-20 minutes) separate from walks, to reinforce bonding and provide mental enrichment. Puzzle toys and training sessions (5-10 minutes daily) also help reduce problem behaviors caused by boredom.
+
+Cat Care Basics
+
+Cats are largely independent but still need daily engagement. Litter boxes should be scooped at least once daily, and fully changed weekly, to prevent cats from avoiding a dirty box. Multi-cat households should have one litter box per cat plus one extra.
+
+Cats should have food available appropriate to their age: kittens under 6 months typically need 3-4 small meals a day, adult cats do well with 2 meals a day (free feeding is discouraged for indoor cats prone to obesity). Fresh water should be checked daily; many cats prefer running water (fountains) over standing bowls.
+
+Indoor cats need daily play time (10-15 minutes) using wand toys or laser pointers to simulate hunting behavior and prevent obesity and boredom-related destructive behavior. This is especially important for cats described as "indoor only".
+
+Grooming for cats: short-haired cats mostly self-groom but benefit from weekly brushing to reduce hairballs. Long-haired cats need brushing every 1-2 days to prevent mats. Nail trims are typically needed every 2-3 weeks.
+
+Cats over the age of 7 are considered mature/senior and should have more frequent (twice yearly) vet checkups and may need adjusted feeding schedules to prevent weight gain as activity decreases with age.
+
+Litter box cleaning, feeding, and fresh water are the three daily non-negotiables for cat care; missing any of them for multiple days can create health or behavioral issues.
+
+General Pet Care Notes
+
+Any pet with "notes" indicating a medical condition (e.g., "on medication", "recovering from surgery", "senior", "needs monitoring") should have care tasks weighted with higher priority and, where relevant, a fixed preferred_time to ensure consistency (e.g., medication given at the same time daily).
+
+For puppies and kittens (age under 1 year), tasks should generally be more frequent but shorter in duration, and prioritized as required since foundational habits and health routines set the stage for adulthood.
+
+When generating a care plan, always include: a feeding-related task, a hygiene/grooming task appropriate to the species, and an activity/enrichment task (walk for dogs, play session for cats). Frequency should default to "daily" for feeding, exercise, and litter care, and "weekly" for grooming/dental unless the species or age suggests otherwise.

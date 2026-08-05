@@ -1,6 +1,12 @@
 import streamlit as st
 
 from pawpal_system import Owner, Pet, Task, Scheduler
+from rag_advisor import RAGAdvisor, RAGAdvisorError
+
+
+@st.cache_resource(show_spinner=False)
+def get_advisor():
+    return RAGAdvisor()
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
@@ -70,6 +76,60 @@ if owner.pets:
     )
 else:
     st.info("No pets yet. Add one above.")
+
+st.divider()
+
+# --- AI Smart Care Plan (RAG) ---
+st.subheader("AI Smart Care Plan")
+st.caption(
+    "AI-generated suggestions based on a general care guide, not a veterinary diagnosis. "
+    "If your pet is showing signs of illness or injury, contact a vet instead of relying on this plan."
+)
+
+if owner.pets:
+    ai_pet_name = st.selectbox("Pet to generate a plan for", [pet.name for pet in owner.pets], key="ai_pet_select")
+
+    if st.button("Generate AI care plan"):
+        target_pet = next(pet for pet in owner.pets if pet.name == ai_pet_name)
+        try:
+            with st.spinner("Retrieving care guidance and consulting Claude..."):
+                advisor = get_advisor()
+                advice, task_dicts = advisor.generate_smart_care_plan(target_pet)
+            st.session_state.ai_advice = advice
+            st.session_state.ai_task_dicts = task_dicts
+            st.session_state.ai_task_pet_name = ai_pet_name
+        except RAGAdvisorError as e:
+            st.error(f"Could not generate an AI care plan: {e}")
+
+    if st.session_state.get("ai_task_dicts") and st.session_state.get("ai_task_pet_name") == ai_pet_name:
+        st.markdown(f"**AI advice for {ai_pet_name}:**")
+        st.write(st.session_state.ai_advice)
+
+        st.write("Proposed tasks:")
+        st.table(st.session_state.ai_task_dicts)
+
+        if st.button("Add these tasks to the schedule"):
+            target_pet = next(pet for pet in owner.pets if pet.name == ai_pet_name)
+            for task_dict in st.session_state.ai_task_dicts:
+                target_pet.add_task(
+                    Task(
+                        task_id=st.session_state.next_task_id,
+                        description=task_dict["description"],
+                        duration_minutes=int(task_dict["duration_minutes"]),
+                        priority=int(task_dict["priority"]),
+                        frequency=task_dict["frequency"],
+                        required=bool(task_dict["required"]),
+                        preferred_time=task_dict.get("preferred_time"),
+                    )
+                )
+                st.session_state.next_task_id += 1
+            st.success(f"Added {len(st.session_state.ai_task_dicts)} AI-generated task(s) for {ai_pet_name}.")
+            del st.session_state.ai_task_dicts
+            del st.session_state.ai_advice
+            del st.session_state.ai_task_pet_name
+            st.rerun()
+else:
+    st.info("Add a pet before generating an AI care plan.")
 
 st.divider()
 
